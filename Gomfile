@@ -1,0 +1,2 @@
+gom "gopkg.in/alecthomas/kingpin.v2"
+gom "github.com/mattn/go-gimei"
