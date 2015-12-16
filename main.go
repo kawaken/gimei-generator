@@ -23,8 +23,8 @@ func genParrot(s string) Generator {
 }
 
 func guessSeparator(format string) string {
-	if strings.Contains(format, "	") {
-		return "	"
+	if strings.Contains(format, "\t") {
+		return "\t"
 	}
 	return ","
 }
