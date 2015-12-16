@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/csv"
+	"fmt"
 	"os"
 	"strings"
 
@@ -83,10 +84,21 @@ func newRow(generators []Generator) []string {
 
 func output(number int, header []string, generators []Generator) {
 	w := csv.NewWriter(os.Stdout)
-	w.Write(header)
+
+	err := w.Write(header)
+	if err != nil {
+		fmt.Printf("Cant write header. %s\n", err)
+		return
+	}
 
 	for i := 0; i < number; i++ {
 		w.Write(newRow(generators))
+		if err != nil {
+			w.Flush()
+			fmt.Printf("Cant write gimei. %d/%d %s\n", i, number, err)
+			return
+		}
+
 		if i%10000 == 0 {
 			w.Flush()
 		}
