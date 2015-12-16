@@ -9,14 +9,14 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
-type Toker struct {
+type Fake struct {
 	name    *gimei.Name
 	address *gimei.Address
 }
-type Generator func(*Toker) string
+type Generator func(*Fake) string
 
 func genParrot(s string) Generator {
-	return func(*Toker) string {
+	return func(*Fake) string {
 		return s
 	}
 }
@@ -37,29 +37,29 @@ func parseFormat(format string, separator string) ([]string, []Generator) {
 		var g Generator
 		switch column {
 		case "姓名", "氏名", "名前":
-			g = func(t *Toker) string { return t.name.Kanji() }
+			g = func(f *Fake) string { return f.name.Kanji() }
 		case "ふりがな", "せいめい", "なまえ":
-			g = func(t *Toker) string { return t.name.Hiragana() }
+			g = func(f *Fake) string { return f.name.Hiragana() }
 		case "フリガナ", "セイメイ", "ナマエ":
-			g = func(t *Toker) string { return t.name.Katakana() }
+			g = func(f *Fake) string { return f.name.Katakana() }
 		case "姓", "氏":
-			g = func(t *Toker) string { return t.name.Last.Kanji() }
+			g = func(f *Fake) string { return f.name.Last.Kanji() }
 		case "せい":
-			g = func(t *Toker) string { return t.name.Last.Hiragana() }
+			g = func(f *Fake) string { return f.name.Last.Hiragana() }
 		case "セイ":
-			g = func(t *Toker) string { return t.name.Last.Katakana() }
+			g = func(f *Fake) string { return f.name.Last.Katakana() }
 		case "名":
-			g = func(t *Toker) string { return t.name.First.Kanji() }
+			g = func(f *Fake) string { return f.name.First.Kanji() }
 		case "めい":
-			g = func(t *Toker) string { return t.name.First.Hiragana() }
+			g = func(f *Fake) string { return f.name.First.Hiragana() }
 		case "メイ":
-			g = func(t *Toker) string { return t.name.First.Katakana() }
+			g = func(f *Fake) string { return f.name.First.Katakana() }
 		case "住所":
-			g = func(t *Toker) string { return t.address.Kanji() }
+			g = func(f *Fake) string { return f.address.Kanji() }
 		case "じゅうしょ":
-			g = func(t *Toker) string { return t.address.Hiragana() }
+			g = func(f *Fake) string { return f.address.Hiragana() }
 		case "ジュウショ":
-			g = func(t *Toker) string { return t.address.Katakana() }
+			g = func(f *Fake) string { return f.address.Katakana() }
 		default:
 			g = genParrot(column)
 		}
@@ -69,14 +69,14 @@ func parseFormat(format string, separator string) ([]string, []Generator) {
 }
 
 func newRow(generators []Generator) []string {
-	t := &Toker{
+	f := &Fake{
 		name:    gimei.NewName(),
 		address: gimei.NewAddress(),
 	}
 
 	row := make([]string, len(generators))
 	for i, g := range generators {
-		row[i] = g(t)
+		row[i] = g(f)
 	}
 	return row
 }
