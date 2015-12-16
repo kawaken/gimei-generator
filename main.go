@@ -82,8 +82,11 @@ func newRow(generators []Generator) []string {
 	return row
 }
 
-func output(number int, header []string, generators []Generator) {
+func output(number int, header []string, generators []Generator, separator string) {
 	w := csv.NewWriter(os.Stdout)
+	for _, r := range separator {
+		w.Comma = r
+	}
 
 	err := w.Write(header)
 	if err != nil {
@@ -120,5 +123,5 @@ func main() {
 	}
 
 	header, generators := parseFormat(format, separator)
-	output(number, header, generators)
+	output(number, header, generators, separator)
 }
